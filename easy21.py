@@ -73,7 +73,7 @@ class Dealer:
     def get_policy(self):
         action_lookup = {Action.HIT:0, Action.STICK:1}
         policy = list()
-        for i in range(1, 21):
+        for i in range(1, 22):
             state = State(dealer_sum=i)
             action = self.get_action(state)
             action_value = action_lookup[action]
@@ -127,14 +127,32 @@ def plot_dealer_policy():
     ax = fig.add_subplot(111)
 
     policy = Dealer().get_policy()
-    x = np.arange(1, 21)
+    x = np.arange(1, 22)
 
     ax.plot(x, policy)
+    plt.show()
+
+def plot_agent_policy(agent):
+    fig = plt.figure('Dealer policy', figsize=(10, 5))
+    ax = fig.add_subplot(111, projection='3d')
+
+    #policy = agent.get_policy()
+    policy = np.zeros((21, 21))
+    for i in range(21):
+        for j in range(21):
+            if j+1 >= 17:
+                policy[i, j] = 1
+    X, Y = np.meshgrid(np.arange(1, 22), np.arange(1, 22))
+
+    print(policy)
+
+    ax.plot_surface(X, Y, policy)
     plt.show()
 
 if __name__ == '__main__':
     env = Environment()
     plot_dealer_policy()
+    plot_agent_policy(None)
     assert(False)
     while True:
         print(env.state)
