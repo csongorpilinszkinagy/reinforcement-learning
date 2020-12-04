@@ -1,5 +1,6 @@
 from enum import Enum
 import numpy as np
+import matplotlib.pyplot as plt
 
 class Color(Enum):
     RED  = 0
@@ -63,11 +64,21 @@ class State:
         return self.is_dealer_bust() or self.is_player_bust()
 
 class Dealer:
-    def policy(self, state):
+    def get_action(self, state):
         if state.dealer_sum >= 17:
             return Action.STICK
         else:
             return Action.HIT
+
+    def get_policy(self):
+        action_lookup = {Action.HIT:0, Action.STICK:1}
+        policy = list()
+        for i in range(1, 21):
+            state = State(dealer_sum=i)
+            action = self.get_action(state)
+            action_value = action_lookup[action]
+            policy.append(action_value)
+        return policy
 
 class Environment:
     def __init__(self):
@@ -80,7 +91,7 @@ class Environment:
 
     def dealer_turn(self, state):
         while not state.terminal:
-            action = self.dealer.policy(state)
+            action = self.dealer.get_action(state)
             if action == Action.HIT:
                 card = self.deck.take_card()
                 state.add_dealer(card)
@@ -110,8 +121,21 @@ class Environment:
         
         return self.state, reward, self.state.terminal
 
+
+def plot_dealer_policy():
+    fig = plt.figure('Dealer policy', figsize=(10, 5))
+    ax = fig.add_subplot(111)
+
+    policy = Dealer().get_policy()
+    x = np.arange(1, 21)
+
+    ax.plot(x, policy)
+    plt.show()
+
 if __name__ == '__main__':
     env = Environment()
+    plot_dealer_policy()
+    assert(False)
     while True:
         print(env.state)
         action = input()
