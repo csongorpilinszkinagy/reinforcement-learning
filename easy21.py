@@ -144,8 +144,6 @@ def plot_agent_policy(agent):
                 policy[i, j] = 1
     X, Y = np.meshgrid(np.arange(1, 22), np.arange(1, 22))
 
-    print(policy)
-
     ax.plot_surface(X, Y, policy)
     plt.show()
 
