@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 import copy
 
-class MonteCarloAgent:
+class MonteCarloAgentEvaluation:
     def __init__(self):
         self.number_visited = np.zeros((10, 21))
         self.total_return = np.zeros((10, 21))
@@ -72,6 +72,7 @@ class MonteCarloAgent:
             self.predict(episode) 
 
         return self.get_value_function()
+    
 
 def plot_agent_value_function(agent):
     fig = plt.figure('Agent value function', figsize=(10, 5))
@@ -98,12 +99,9 @@ def plot_agent_value_function(agent):
 
 
 if __name__ == '__main__':
-    agent = MonteCarloAgent()
+    agent = MonteCarloAgentEvaluation()
     env = Environment()
     agent.train(100000, env)
 
     #plot_agent_policy(agent)
     plot_agent_value_function(agent)
-    
-
-
