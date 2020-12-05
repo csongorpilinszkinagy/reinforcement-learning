@@ -2,6 +2,7 @@ import numpy as np
 from easy21 import Action, Environment
 import copy
 import matplotlib.pyplot as plt
+import copy
 
 class MonteCarloAgent:
     def __init__(self):
@@ -32,8 +33,6 @@ class MonteCarloAgent:
         return policy
     
     def predict(self, episode):
-        print(episode)
-        #print(episode[-1][0])
         episode_length = len(episode)
         for i in range(episode_length):
             current_return = 0.
@@ -51,16 +50,16 @@ class MonteCarloAgent:
             env.initial_state()
             print(e)
             episode = []
-            state = env.state
+            state = copy.copy(env.state)
             
             while True:
                 state_tuple = (state.dealer_sum-1, state.player_sum-1)
                 self.number_visited[state_tuple] += 1
                 action = self.get_action(state)
                 next_state, reward, done = env.step(action)
-                if done: break
                 print(f'State added: {state}, action: {action}, reward: {reward}')
-                episode.append((copy.copy(state), action, reward))
+                episode.append((state, action, reward))
+                if done: break
                 
                 state = next_state
                 
@@ -104,7 +103,7 @@ if __name__ == '__main__':
     env = Environment()
     agent.train(10000, env)
 
-    plot_agent_policy(agent)
+    #plot_agent_policy(agent)
     plot_agent_value_function(agent)
     
 
