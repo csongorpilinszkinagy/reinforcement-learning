@@ -41,12 +41,10 @@ class State:
         return f'Dealer sum: {self.dealer_sum}, Player sum: {self.player_sum}'
 
     def add_dealer(self, card):
-        print(f'Dealer card value: {card.value}')
         self.dealer_sum += card.value
         self.terminal = self.is_terminal()
     
     def add_player(self, card):
-        print(f'Player card value: {card.value}')
         self.player_sum += card.value
         self.terminal = self.is_terminal()
     
@@ -103,7 +101,6 @@ class Environment:
             elif action == Action.STICK:
                 state.terminal = True
                 break
-            print(state)
         return state
     
     def step(self, action):

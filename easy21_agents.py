@@ -54,7 +54,6 @@ class MonteCarloAgent:
             state = env.state
             
             while True:
-                print(state)
                 state_tuple = (state.dealer_sum-1, state.player_sum-1)
                 self.number_visited[state_tuple] += 1
                 action = self.get_action(state)
