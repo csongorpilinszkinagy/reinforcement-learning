@@ -89,15 +89,24 @@ def plot_agent_policy(agent):
     ax.plot_surface(X, Y, policy)
     plt.show()
 
+def plot_agent_value_function(agent):
+    fig = plt.figure('Agent value function', figsize=(10, 5))
+    ax = fig.add_subplot(111, projection='3d')
 
+    value_function = agent.get_value_function()
+    X, Y = np.meshgrid(np.arange(1, 22), np.arange(1, 22))
+
+    ax.plot_surface(X, Y, value_function)
+    plt.show()
 
 
 if __name__ == '__main__':
     agent = MonteCarloAgent()
     env = Environment()
-    agent.train(1000, env)
+    agent.train(10000, env)
 
     plot_agent_policy(agent)
+    plot_agent_value_function(agent)
     
 
 
