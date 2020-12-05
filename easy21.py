@@ -86,6 +86,11 @@ class Environment:
         self.deck = Deck()
         self.state = State()
         
+        
+    
+    def initial_state(self):
+        self.state.dealer_sum = 0
+        self.state.player_sum = 0
         self.state.add_dealer(self.deck.take_card(Color.BLACK))
         self.state.add_player(self.deck.take_card(Color.BLACK))
 
