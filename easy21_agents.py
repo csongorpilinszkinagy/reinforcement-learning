@@ -2,6 +2,7 @@ import numpy as np
 from easy21 import Action, Environment
 import copy
 import matplotlib.pyplot as plt
+from matplotlib import cm
 import copy
 
 class MonteCarloAgent:
@@ -92,9 +93,13 @@ def plot_agent_value_function(agent):
     ax = fig.add_subplot(111, projection='3d')
 
     value_function = agent.get_value_function()
+    
     X, Y = np.meshgrid(np.arange(1, 22), np.arange(1, 22))
 
-    ax.plot_surface(X, Y, value_function)
+    ax.set_xlabel('Dealer Showing')
+    ax.set_ylabel('Player Sum')
+    ax.set_zlabel('Value')
+    ax.plot_surface(X, Y, value_function, rstride=1, cstride=1, cmap=cm.coolwarm, linewidth=0)
     plt.show()
 
 
