@@ -1,6 +1,7 @@
 from enum import Enum
 import numpy as np
 import matplotlib.pyplot as plt
+import copy
 
 class Color(Enum):
     RED  = 0
@@ -109,6 +110,7 @@ class Environment:
         if action == Action.HIT:
             self.state.add_player(self.deck.take_card())
             if self.state.is_player_bust():
+                print('reward -1')
                 reward = -1
 
         if action == Action.STICK:
@@ -120,8 +122,8 @@ class Environment:
                     reward = -1
                 if self.state.dealer_sum < self.state.player_sum:
                     reward = 1
-        
-        return self.state, reward, self.state.terminal
+        print(f'reward before return {reward}')
+        return copy.copy(self.state), reward, self.state.terminal
 
 
 def plot_dealer_policy():
