@@ -7,9 +7,9 @@ import copy
 
 class MonteCarloAgent:
     def __init__(self):
-        self.number_visited = np.zeros((21, 21))
-        self.total_return = np.zeros((21, 21))
-        self.value_function = np.zeros((21, 21))
+        self.number_visited = np.zeros((10, 21))
+        self.total_return = np.zeros((10, 21))
+        self.value_function = np.zeros((10, 21))
         self.discount_factor = 0.99
     
     # TODO: not needed
@@ -24,10 +24,10 @@ class MonteCarloAgent:
     
     def get_policy(self):
         action_lookup = {Action.HIT:0, Action.STICK:1}
-        policy = np.zeros((21, 21))
-        for i in range(21):
+        policy = np.zeros((10, 21))
+        for i in range(10):
             for j in range(21):
-                state = State(dealer_sum=i, player_sum=j)
+                state = State(dealer_sum=i+1, player_sum=j+1)
                 action = self.get_action(state)
                 action_value = action_lookup[action]
                 policy[i,j] = action_value
@@ -73,40 +73,34 @@ class MonteCarloAgent:
 
         return self.get_value_function()
 
-def plot_agent_policy(agent):
-    fig = plt.figure('Agent policy', figsize=(10, 5))
-    ax = fig.add_subplot(111, projection='3d')
-
-    #policy = agent.get_policy()
-    policy = np.zeros((21, 21))
-    for i in range(21):
-        for j in range(21):
-            if j+1 >= 17:
-                policy[i, j] = 1
-    X, Y = np.meshgrid(np.arange(1, 22), np.arange(1, 22))
-
-    ax.plot_surface(X, Y, policy)
-    plt.show()
-
 def plot_agent_value_function(agent):
     fig = plt.figure('Agent value function', figsize=(10, 5))
     ax = fig.add_subplot(111, projection='3d')
 
     value_function = agent.get_value_function()
     
-    X, Y = np.meshgrid(np.arange(1, 22), np.arange(1, 22))
+    X, Y = np.meshgrid(np.arange(1, 22, 1), np.arange(1, 11, 1))
+    print(X.shape)
+    print(Y.shape)
+    print(value_function.shape)
 
-    ax.set_xlabel('Dealer Showing')
-    ax.set_ylabel('Player Sum')
+    ax.set_xlabel('Player Sum')
+    ax.set_ylabel('Dealer showing')
     ax.set_zlabel('Value')
-    ax.plot_surface(X, Y, value_function, rstride=1, cstride=1, cmap=cm.coolwarm, linewidth=0)
+    ax.set_xticks(np.arange(1, 22, step=5))
+    ax.set_yticks(np.arange(1, 11, step=1))
+    ax.set_zlim(-1., 1.)
+
+    surf = ax.plot_surface(X, Y, value_function, cmap=cm.coolwarm, linewidth=0)
+
+    fig.colorbar(surf, shrink=0.5, aspect=5)
     plt.show()
 
 
 if __name__ == '__main__':
     agent = MonteCarloAgent()
     env = Environment()
-    agent.train(10000, env)
+    agent.train(100000, env)
 
     #plot_agent_policy(agent)
     plot_agent_value_function(agent)
