@@ -1,6 +1,7 @@
 import numpy as np
 from easy21 import Action, Environment
 import copy
+import matplotlib.pyplot as plt
 
 class MonteCarloAgent:
     def __init__(self):
@@ -18,6 +19,17 @@ class MonteCarloAgent:
             return Action.STICK
         else:
             return Action.HIT
+    
+    def get_policy(self):
+        action_lookup = {Action.HIT:0, Action.STICK:1}
+        policy = np.zeros((21, 21))
+        for i in range(21):
+            for j in range(21):
+                state = State(dealer_sum=i, player_sum=j)
+                action = self.get_action(state)
+                action_value = action_lookup[action]
+                policy[i,j] = action_value
+        return policy
     
     def predict(self, episode):
         print(episode)
@@ -62,11 +74,30 @@ class MonteCarloAgent:
 
         return self.get_value_function()
 
+def plot_agent_policy(agent):
+    fig = plt.figure('Agent policy', figsize=(10, 5))
+    ax = fig.add_subplot(111, projection='3d')
+
+    #policy = agent.get_policy()
+    policy = np.zeros((21, 21))
+    for i in range(21):
+        for j in range(21):
+            if j+1 >= 17:
+                policy[i, j] = 1
+    X, Y = np.meshgrid(np.arange(1, 22), np.arange(1, 22))
+
+    ax.plot_surface(X, Y, policy)
+    plt.show()
+
+
+
 
 if __name__ == '__main__':
     agent = MonteCarloAgent()
     env = Environment()
-    agent.train(100000, env)
+    agent.train(1000, env)
+
+    plot_agent_policy(agent)
     
 
 
