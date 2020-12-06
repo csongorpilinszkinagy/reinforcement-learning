@@ -41,6 +41,9 @@ class State:
         self.dealer_sum = dealer_sum
         self.player_sum = player_sum
         self.terminal = terminal
+
+        self.bust_min = 1
+        self.bust_max = 21
     
     def __str__(self):
         return f'Dealer sum: {self.dealer_sum}, Player sum: {self.player_sum}'
@@ -54,12 +57,12 @@ class State:
         self.terminal = self.is_terminal()
     
     def is_dealer_bust(self):
-        if self.dealer_sum < 1 or self.dealer_sum > 21:
+        if self.dealer_sum < self.bust_min or self.dealer_sum > self.bust_max:
             return True
         return False
     
     def is_player_bust(self):
-        if self.player_sum < 1 or self.player_sum > 21:
+        if self.player_sum < self.bust_min or self.player_sum > self.bust_max:
             return True
         return False
     
