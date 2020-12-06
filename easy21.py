@@ -70,15 +70,21 @@ class State:
         return self.is_dealer_bust() or self.is_player_bust()
 
 class Dealer:
+    def __init__(self):
+        self.dealer_stop = 17
+        # TODO: this should come from the game not from the dealer
+        self.bust_min = 1
+        self.bust_max = 21
+
     def get_action(self, state):
-        if state.dealer_sum >= 17:
+        if state.dealer_sum >= self.dealer_stop:
             return Action.STICK
         else:
             return Action.HIT
 
     def get_policy(self):
         policy = list()
-        for i in range(1, 22):
+        for i in range(self.bust_min, self.bust_max):
             state = State(dealer_sum=i)
             action = self.get_action(state)
             action_value = Action(action)
