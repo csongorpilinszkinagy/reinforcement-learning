@@ -70,12 +70,11 @@ class Dealer:
             return Action.HIT
 
     def get_policy(self):
-        action_lookup = {Action.HIT:0, Action.STICK:1}
         policy = list()
         for i in range(1, 22):
             state = State(dealer_sum=i)
             action = self.get_action(state)
-            action_value = action_lookup[action]
+            action_value = Action(action)
             policy.append(action_value)
         return policy
 

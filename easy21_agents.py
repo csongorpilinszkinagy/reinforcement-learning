@@ -24,13 +24,12 @@ class MonteCarloAgentEvaluation:
             return Action.HIT
     
     def get_policy(self):
-        action_lookup = {Action.HIT:0, Action.STICK:1}
         policy = np.zeros((10, 21))
         for i in range(10):
             for j in range(21):
                 state = State(dealer_sum=i+1, player_sum=j+1)
                 action = self.get_action(state)
-                action_value = action_lookup[action]
+                action_value = Action(action)
                 policy[i,j] = action_value
         return policy
     
@@ -179,7 +178,7 @@ def plot_agent_value_function(agent):
 if __name__ == '__main__':
     agent = MonteCarloAgentControl()
     env = Environment()
-    agent.train(100000, env)
+    agent.train(10000, env)
 
     #plot_agent_policy(agent)
     plot_agent_value_function(agent)
