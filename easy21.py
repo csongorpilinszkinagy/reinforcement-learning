@@ -13,13 +13,17 @@ class Action(Enum):
 
 class Card:
     def __init__(self, color=None, number=None):
+        self.min_card_value = 1
+        self.max_card_value = 10
+        self.chance_red = 1./3.
+        self.chance_black = 1.-self.chance_red
         if number == None:
-            self.number = np.random.randint(1, 11)
+            self.number = np.random.randint(self.min_card_value, self.max_card_value+1)
         else:
             self.number = number
 
         if color == None:
-            self.color = np.random.choice([Color.RED, Color.BLACK], 1, p=[0.33, 0.67])[0]
+            self.color = np.random.choice([Color.RED, Color.BLACK], 1, p=[self.chance_red, self.chance_black])[0]
         else:
             self.color = color
 
