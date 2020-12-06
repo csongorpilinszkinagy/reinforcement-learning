@@ -8,25 +8,28 @@ import random
 
 class MonteCarloAgentEvaluation:
     def __init__(self):
-        self.number_visited = np.zeros((10, 21))
-        self.total_return = np.zeros((10, 21))
-        self.value_function = np.zeros((10, 21))
+        self.dealer_states = 10
+        self.player_states = 21
+        self.number_visited = np.zeros((self.dealer_states, self.player_states))
+        self.total_return = np.zeros((self.dealer_states, self.player_states))
+        self.value_function = np.zeros((self.dealer_states, self.player_states))
         self.discount_factor = 0.99
+        self.player_stop = 17
     
     # TODO: not needed
     def get_value_function(self):
         return self.value_function
     
     def get_action(self, state):
-        if state.player_sum >= 17:
+        if state.player_sum >= self.player_stop:
             return Action.STICK
         else:
             return Action.HIT
     
     def get_policy(self):
-        policy = np.zeros((10, 21))
-        for i in range(10):
-            for j in range(21):
+        policy = np.zeros((self.dealer_states, self.player_states))
+        for i in range(self.dealer_states):
+            for j in range(self.player_states):
                 state = State(dealer_sum=i+1, player_sum=j+1)
                 action = self.get_action(state)
                 action_value = Action(action)
