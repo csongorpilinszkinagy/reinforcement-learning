@@ -13,13 +13,17 @@ class Action(Enum):
 
 class Card:
     def __init__(self, color=None, number=None):
+        self.min_card_value = 1
+        self.max_card_value = 10
+        self.chance_red = 1./3.
+        self.chance_black = 1.-self.chance_red
         if number == None:
-            self.number = np.random.randint(1, 11)
+            self.number = np.random.randint(self.min_card_value, self.max_card_value+1)
         else:
             self.number = number
 
         if color == None:
-            self.color = np.random.choice([Color.RED, Color.BLACK], 1, p=[0.33, 0.67])[0]
+            self.color = np.random.choice([Color.RED, Color.BLACK], 1, p=[self.chance_red, self.chance_black])[0]
         else:
             self.color = color
 
@@ -37,6 +41,9 @@ class State:
         self.dealer_sum = dealer_sum
         self.player_sum = player_sum
         self.terminal = terminal
+
+        self.bust_min = 1
+        self.bust_max = 21
     
     def __str__(self):
         return f'Dealer sum: {self.dealer_sum}, Player sum: {self.player_sum}'
@@ -50,12 +57,12 @@ class State:
         self.terminal = self.is_terminal()
     
     def is_dealer_bust(self):
-        if self.dealer_sum < 1 or self.dealer_sum > 21:
+        if self.dealer_sum < self.bust_min or self.dealer_sum > self.bust_max:
             return True
         return False
     
     def is_player_bust(self):
-        if self.player_sum < 1 or self.player_sum > 21:
+        if self.player_sum < self.bust_min or self.player_sum > self.bust_max:
             return True
         return False
     
@@ -63,15 +70,21 @@ class State:
         return self.is_dealer_bust() or self.is_player_bust()
 
 class Dealer:
+    def __init__(self):
+        self.dealer_stop = 17
+        # TODO: this should come from the game not from the dealer
+        self.bust_min = 1
+        self.bust_max = 21
+
     def get_action(self, state):
-        if state.dealer_sum >= 17:
+        if state.dealer_sum >= self.dealer_stop:
             return Action.STICK
         else:
             return Action.HIT
 
     def get_policy(self):
         policy = list()
-        for i in range(1, 22):
+        for i in range(self.bust_min, self.bust_max):
             state = State(dealer_sum=i)
             action = self.get_action(state)
             action_value = Action(action)
@@ -126,11 +139,12 @@ class Environment:
 
 
 def plot_dealer_policy():
+
     fig = plt.figure('Dealer policy', figsize=(10, 5))
     ax = fig.add_subplot(111)
 
     policy = Dealer().get_policy()
-    x = np.arange(1, 22)
+    x = np.arange(1, len(policy)+1)
 
     ax.plot(x, policy)
     plt.show()
@@ -139,6 +153,7 @@ def plot_agent_policy(agent):
     fig = plt.figure('Dealer policy', figsize=(10, 5))
     ax = fig.add_subplot(111, projection='3d')
 
+    # TODO: replace this mock code with real agent policy plotting
     #policy = agent.get_policy()
     policy = np.zeros((21, 21))
     for i in range(21):

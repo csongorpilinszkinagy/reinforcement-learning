@@ -8,25 +8,28 @@ import random
 
 class MonteCarloAgentEvaluation:
     def __init__(self):
-        self.number_visited = np.zeros((10, 21))
-        self.total_return = np.zeros((10, 21))
-        self.value_function = np.zeros((10, 21))
+        self.dealer_states = 10
+        self.player_states = 21
+        self.number_visited = np.zeros((self.dealer_states, self.player_states))
+        self.total_return = np.zeros((self.dealer_states, self.player_states))
+        self.value_function = np.zeros((self.dealer_states, self.player_states))
         self.discount_factor = 0.99
+        self.player_stop = 17
     
     # TODO: not needed
     def get_value_function(self):
         return self.value_function
     
     def get_action(self, state):
-        if state.player_sum >= 17:
+        if state.player_sum >= self.player_stop:
             return Action.STICK
         else:
             return Action.HIT
     
     def get_policy(self):
-        policy = np.zeros((10, 21))
-        for i in range(10):
-            for j in range(21):
+        policy = np.zeros((self.dealer_states, self.player_states))
+        for i in range(self.dealer_states):
+            for j in range(self.player_states):
                 state = State(dealer_sum=i+1, player_sum=j+1)
                 action = self.get_action(state)
                 action_value = Action(action)
@@ -75,8 +78,11 @@ class MonteCarloAgentEvaluation:
     
 class MonteCarloAgentControl:
     def __init__(self):
-        self.number_visited = np.zeros((10, 21, 2))
-        self.Q = np.zeros((10, 21, 2))
+        self.dealer_states = 10
+        self.player_states = 21
+        self.actions = 2
+        self.number_visited = np.zeros((self.dealer_states, self.player_states, self.actions))
+        self.Q = np.zeros((self.dealer_states, self.player_states, self.actions))
         self.discount_factor = 0.99
     
     def get_alpha(self, state, action):
@@ -91,7 +97,6 @@ class MonteCarloAgentControl:
     def get_max_action(self, state):
         return Action(np.argmax(self.Q[state.dealer_sum-1][state.player_sum-1]))
     
-
     def control(self, episode):
         episode_length = len(episode)
         for i in range(episode_length):
@@ -157,6 +162,7 @@ def plot_agent_value_function(agent):
 
     value_function = agent.get_value_function()
     
+    # TODO: get these from the environment
     X, Y = np.meshgrid(np.arange(1, 22, 1), np.arange(1, 11, 1))
     print(X.shape)
     print(Y.shape)
@@ -165,6 +171,7 @@ def plot_agent_value_function(agent):
     ax.set_xlabel('Player Sum')
     ax.set_ylabel('Dealer showing')
     ax.set_zlabel('Value')
+    # TODO: get these from the environment
     ax.set_xticks(np.arange(1, 22, step=5))
     ax.set_yticks(np.arange(1, 11, step=1))
     ax.set_zlim(-1., 1.)
