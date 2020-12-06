@@ -14,7 +14,7 @@ class Action(Enum):
 class Card:
     def __init__(self, color=None, number=None):
         if number == None:
-            self.number = np.random.randint(1, 10)
+            self.number = np.random.randint(1, 11)
         else:
             self.number = number
 
