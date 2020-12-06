@@ -139,11 +139,12 @@ class Environment:
 
 
 def plot_dealer_policy():
+
     fig = plt.figure('Dealer policy', figsize=(10, 5))
     ax = fig.add_subplot(111)
 
     policy = Dealer().get_policy()
-    x = np.arange(1, 22)
+    x = np.arange(1, len(policy)+1)
 
     ax.plot(x, policy)
     plt.show()
@@ -152,6 +153,7 @@ def plot_agent_policy(agent):
     fig = plt.figure('Dealer policy', figsize=(10, 5))
     ax = fig.add_subplot(111, projection='3d')
 
+    # TODO: replace this mock code with real agent policy plotting
     #policy = agent.get_policy()
     policy = np.zeros((21, 21))
     for i in range(21):
