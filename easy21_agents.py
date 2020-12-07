@@ -22,9 +22,13 @@ class MonteCarloAgentEvaluation:
     
     def get_action(self, state):
         if state.player_sum >= self.player_stop:
-            return Action.STICK
+            action = Action.STICK
         else:
-            return Action.HIT
+            action =  Action.HIT
+        
+        state_tuple = (state.dealer_sum-1, state.player_sum-1)
+        self.number_visited[state_tuple] += 1
+        return action
     
     def get_policy(self):
         policy = np.zeros((self.dealer_states, self.player_states))
@@ -57,8 +61,6 @@ class MonteCarloAgentEvaluation:
             state = copy.copy(env.state)
             
             while True:
-                state_tuple = (state.dealer_sum-1, state.player_sum-1)
-                self.number_visited[state_tuple] += 1
                 action = self.get_action(state)
                 next_state, reward, done = env.step(action)
                 print(f'State added: {state}, action: {action}, reward: {reward}')
@@ -183,6 +185,14 @@ def plot_agent_value_function(agent):
 
 
 if __name__ == '__main__':
+    agent = MonteCarloAgentEvaluation()
+    env = Environment()
+    agent.train(10000, env)
+
+    #plot_agent_policy(agent)
+    plot_agent_value_function(agent)
+
+
     agent = MonteCarloAgentControl()
     env = Environment()
     agent.train(10000, env)
