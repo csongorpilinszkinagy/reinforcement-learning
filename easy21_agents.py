@@ -1,5 +1,5 @@
 import numpy as np
-from easy21 import Action, Environment
+from easy21 import Action, Environment, State
 import copy
 import matplotlib.pyplot as plt
 from matplotlib import cm
@@ -30,14 +30,15 @@ class MonteCarloAgentEvaluation:
         self.number_visited[state_tuple] += 1
         return action
     
+    def get_max_action(self, state):
+        return self.get_action(state)
+    
     def get_policy(self):
         policy = np.zeros((self.dealer_states, self.player_states))
         for i in range(self.dealer_states):
             for j in range(self.player_states):
                 state = State(dealer_sum=i+1, player_sum=j+1)
-                action = self.get_action(state)
-                action_value = Action(action)
-                policy[i,j] = action_value
+                policy[i,j] = self.get_max_action(state).value
         return policy
     
     def predict(self, episode):
@@ -126,6 +127,14 @@ class MonteCarloAgentControl:
 
         return action
     
+    def get_policy(self):
+        policy = np.zeros((self.dealer_states, self.player_states))
+        for i in range(self.dealer_states):
+            for j in range(self.player_states):
+                state = State(dealer_sum=i+1, player_sum=j+1)
+                policy[i,j] = self.get_max_action(state).value
+        return policy
+    
     def train(self, episodes, env):
         for e in range(episodes):
             env.initial_state()
@@ -184,19 +193,36 @@ def plot_agent_value_function(name, agent):
     fig.colorbar(surf, shrink=0.5, aspect=5)
     plt.savefig(f'fig/{name}.png')
 
+def plot_agent_policy(name, agent):
+    fig = plt.figure('Agent policy', figsize=(10, 5))
+    ax = fig.add_subplot(111)
+    ax.set_xticks(np.arange(21))
+    ax.set_yticks(np.arange(10))
+
+    ax.set_xticklabels(np.arange(1, 22))
+    ax.set_yticklabels(np.arange(1, 11))
+
+    ax.set_xlabel('Player Sum')
+    ax.set_ylabel('Dealer showing')
+
+    policy = agent.get_policy()
+    image = ax.imshow(policy)
+    fig.colorbar(image, shrink=0.5, aspect=5)
+
+    plt.savefig(f'fig/{name}.png')
 
 if __name__ == '__main__':
     agent = MonteCarloAgentEvaluation()
     env = Environment()
     agent.train(10000, env)
 
-    #plot_agent_policy(agent)
-    plot_agent_value_function('MCEval', agent)
+    plot_agent_policy('MCEval-policy', agent)
+    plot_agent_value_function('MCEval-value-function', agent)
 
 
     agent = MonteCarloAgentControl()
     env = Environment()
-    agent.train(10000, env)
+    agent.train(100000, env)
 
-    #plot_agent_policy(agent)
-    plot_agent_value_function('MCControl', agent)
+    plot_agent_policy('MCControl-policy', agent)
+    plot_agent_value_function('MCControl-value-function', agent)
