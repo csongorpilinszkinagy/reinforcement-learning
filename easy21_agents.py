@@ -159,7 +159,7 @@ class MonteCarloAgentControl:
 
 
 
-def plot_agent_value_function(agent):
+def plot_agent_value_function(name, agent):
     fig = plt.figure('Agent value function', figsize=(10, 5))
     ax = fig.add_subplot(111, projection='3d')
 
@@ -182,7 +182,7 @@ def plot_agent_value_function(agent):
     surf = ax.plot_surface(X, Y, value_function, cmap=cm.coolwarm, linewidth=0)
 
     fig.colorbar(surf, shrink=0.5, aspect=5)
-    plt.show()
+    plt.savefig(f'fig/{name}.png')
 
 
 if __name__ == '__main__':
@@ -191,7 +191,7 @@ if __name__ == '__main__':
     agent.train(10000, env)
 
     #plot_agent_policy(agent)
-    plot_agent_value_function(agent)
+    plot_agent_value_function('MCEval', agent)
 
 
     agent = MonteCarloAgentControl()
@@ -199,4 +199,4 @@ if __name__ == '__main__':
     agent.train(10000, env)
 
     #plot_agent_policy(agent)
-    plot_agent_value_function(agent)
+    plot_agent_value_function('MCControl', agent)
