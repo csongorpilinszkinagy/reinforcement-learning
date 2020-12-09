@@ -97,5 +97,100 @@ There are two types of environments a RL agent can work in:
     * Stochastic policy:
         * policy(action|state) = P[A_t = a|S_t = s]
 * Value function
-    ...
+    * Variable name: V
+    * Prediction of future reward
+    * Expected value of sum of future discounted rewards
+* Model
+    * Varibale name: P, R
+    * Predicts what the environment will do next
+    * P predicts the next state
+    * P is a state transition matrix
+    * R predicts the next reward
+* Learning and planning
+    * Reinforcement learning
+        * Environment is unknown
+        * Agent interacts with environment
+        * Agent improves its policy
+    * Planning
+        * A model of the environment is known
+        * Agent improves policy by simulation
+* Exploration vs Exploitation
+    * Exploration finds more information about the environment
+    * Exploitation exploits known information about the environment for maximum reward
+* Prediction and control
+    * Prediction evaluates the future
+    * Control optimises the future
+* Markov Process (Markov chain)
+    * A memoryless random process, a sequence of random states with Markov property
+* Markov Reward Process
+    * A Markov process with reward values and a discount factor
+    * R: reward function of state
+    * gamma: discount factor [0, 1]
+* Return
+    * Variable name: G
+    * Total discounted reward from timestep t
+    * G_t = R_t+1 + gamma * R_t+2 + ...
+* Discount
+    * Variable name: gamma
+    * 0 discount is short sighted
+    * 1 discount is far sighted
+    * Mathematically convenient, avoids infinite returns
+    * Uncertainty about the future
+    * Preference for immediate reward (mortality)
+* Value function
+    * State-value function
+        * Expected return starting from state s, and then following given policy
+    * Action-value function
+        * Expected return
+starting from state s, taking action a, and then following given policy
+    * Bellman equation is applicable to both state and action value functions
+* Bellman equation for MRPs
+    * The value function can be decomposed into two parts
+        * Immediate reward (R_t+1)
+        * Discounted value of succesor state (gamma * V(S_t+1))
+    * Can be solved as a linear equation using the state transition matrix
+    * Only works for small number of states (O(n^3) computational complexity)
+* Markov Decision process
+    * Markov Reward Process with decisions
+    * A is a finite set of actions
+* Policy
+    * Variable name: policy
+    * Distribution over actions given states
+    * Fully defines the bahviour of the agent
+    * Policies are stationary (after training)
+* Optimal value function
+    * Optimal state-value function is the maximum value function over all policies
+        * V*(s) = max(V(s))
+    * Optimal action-value function is the maximum action-value function over all policies
+        * Q*(s,a) = max(Q(s,a))
+    * The optimal value function specifies the best possible performance in the MDP
+    * The MDP is solved when the optimal value function is known
+* Optimal Policy
+    * For any MDP there is an optimal policy that is better or equal to all other policies
+    * All optimal policies have the optimal value function
+    * Apll optimal policies have the optimal action-value function
+* Solving the Bellman Optimality Equation
+    * Non-linear, no closed solution
+    * Many iterative solutions
+        * Value Iteration
+        * Policy Iteration
+        * Q-learning
+        * Sarsa
+* Extensions to MDPs
+    * Infinite and continuous MDPs
+    * Paritally observable MDPs
+    * Undiscounted, average reward MDPs
+* Planning by dynamic programming
+    * Markov Deciosion Precesses satisfy DP properties
+    * Prediction: outputs value function
+    * Control: Outputs optimal value function and policy
+* Iterative Policy Evaluation
+    * Iterative application of Bellman expectation backup
+    * Every iteration update V_k+1(s) from V_k(s') where s' is successor of s
+* Improve a policy (Policy iteration)
+    * Evaluate policy, giving a new value-function
+    * Improve policy by acting greedily with respect to the value function
+    * Update policy every iteration, equivalent to value iteration
+* Value iteration
+    * ...
 
