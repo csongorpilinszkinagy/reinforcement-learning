@@ -6,6 +6,7 @@ from easy21 import Environment
 
 from monte_carlo_agent_evaluation import MonteCarloAgentEvaluation
 from monte_carlo_agent_control import MonteCarloAgentControl
+from td_zero_agent import TDZeroAgent
 
 def plot_agent_value_function(name, agent):
     fig = plt.figure('Agent value function', figsize=(10, 5))
@@ -53,15 +54,22 @@ def plot_agent_policy(name, agent):
 if __name__ == '__main__':
     agent = MonteCarloAgentEvaluation()
     env = Environment()
-    agent.train(10000, env)
+    #agent.train(10000, env)
 
-    plot_agent_policy('MCEval-policy', agent)
-    plot_agent_value_function('MCEval-value-function', agent)
+    #plot_agent_policy('MCEval-policy', agent)
+    #plot_agent_value_function('MCEval-value-function', agent)
 
 
     agent = MonteCarloAgentControl()
     env = Environment()
-    agent.train(100000, env)
+    #agent.train(100000, env)
 
-    plot_agent_policy('MCControl-policy', agent)
-    plot_agent_value_function('MCControl-value-function', agent)
+    #plot_agent_policy('MCControl-policy', agent)
+    #plot_agent_value_function('MCControl-value-function', agent)
+
+    agent = TDZeroAgent()
+    env = Environment()
+    agent.train(10000, env)
+
+    plot_agent_policy('TDZero-policy', agent)
+    plot_agent_value_function('TDZero-value-function', agent)
