@@ -51,6 +51,7 @@ class MonteCarloAgentControl:
 
         return action
     
+    # TODO: should be one argmax
     def get_policy(self):
         policy = np.zeros((self.dealer_states, self.player_states))
         for i in range(self.dealer_states):
