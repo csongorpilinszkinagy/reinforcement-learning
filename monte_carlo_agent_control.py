@@ -61,9 +61,9 @@ class MonteCarloAgentControl:
         return policy
     
     def train(self, episodes, env):
+        print('Training Monte Carlo Agent Control')
         for e in range(episodes):
             env.initial_state()
-            print(e)
             episode = []
             state = copy.copy(env.state)
             
@@ -72,16 +72,13 @@ class MonteCarloAgentControl:
                 self.number_visited[state_tuple] += 1
                 action = self.get_action(state)
                 next_state, reward, done = env.step(action)
-                print(f'State added: {state}, action: {action}, reward: {reward}')
                 episode.append((state, action, reward))
                 if done: break
                 
                 state = next_state
                 
-
-            #self.iterations += 1
-            if e % 10000 == 0 and e != 0:
-                print("Episode: %d" % e)
+            if (e+1) % 10000 == 0:
+                print(f'Episode: {e+1}')
             
             self.control(episode) 
 

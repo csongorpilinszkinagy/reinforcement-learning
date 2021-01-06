@@ -15,9 +15,6 @@ def plot_agent_value_function(name, agent):
     
     # TODO: get these from the environment
     X, Y = np.meshgrid(np.arange(1, 22, 1), np.arange(1, 11, 1))
-    print(X.shape)
-    print(Y.shape)
-    print(value_function.shape)
 
     ax.set_xlabel('Player Sum')
     ax.set_ylabel('Dealer showing')
@@ -53,7 +50,7 @@ def plot_agent_policy(name, agent):
 if __name__ == '__main__':
     agent = MonteCarloAgentEvaluation()
     env = Environment()
-    agent.train(10000, env)
+    agent.train(100000, env)
 
     plot_agent_policy('MCEval-policy', agent)
     plot_agent_value_function('MCEval-value-function', agent)
@@ -61,7 +58,7 @@ if __name__ == '__main__':
 
     agent = MonteCarloAgentControl()
     env = Environment()
-    agent.train(100000, env)
+    agent.train(1000000, env)
 
     plot_agent_policy('MCControl-policy', agent)
     plot_agent_value_function('MCControl-value-function', agent)
