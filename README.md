@@ -2,6 +2,49 @@
 
 This is my collection of reinforcement learning baseline applied on a wide variety of OpenAI gym environments.
 
+## Usage
+
+Running the following command to run all implemented RL agents on the Easy21 game.
+
+'''
+python3 easy21_agents.py
+'''
+
+After training the agents for multiple episodes the results are presented in two forms:
+
+* A matrix representing the policy of the agent where purple or 0 is HIT and yellow or 1 is STICK
+* A 3D plot representing the value function of the agent for every state
+
+## Monte Carlo Agent Evaluation
+
+The Monte Carlo Agent with evaluation uses a fixed policy while evaluating the value function for each state.
+
+### Policy
+![Monte Carlo Agent Evaluation - Policy](fig/MCEval-policy.png)
+
+The player sum means the state of the agent. The fixed policy is the following:
+* for every sum under 17 for the player it will HIT, so draw a new card
+* for every sum of 17 and over it will STICK, so won't receive further cards
+
+### Value function
+![Monte Carlo Agent Evaluation - Value function](fig/MCEval-value-function.png)
+
+The value function reflects this fixed policy, the state values are consistent across the different dealer sums, since this does not effect the decisions of the agent. Obviously the low player sums represent a low value, since the agents can not win with these numbers only if the dealer goes bust. The higher sums have higher values, since these will probably beat the dealer. However there is a valley between 11 and 16. This is the region where the agent will still draw but could go bust with higher value cards.
+
+## Monte Carlo Agent Control
+
+The Monte Carlo Agent with control is simoutaneously updating the value function of every state and then acts upon those values greedily.
+
+### Policy
+![Monte Carlo Agent Control - Policy](fig/MCControl-policy.png)
+
+This policy if currently false.
+
+### Value function
+![Monte Carlo Agent Control - Value function](fig/MCControl-value-function.png)
+
+The value function seems to be allright. The higher the dealer is showing the less the agent thinks it will win. And there is still a valley around 16 there, where it is risky to HIT.
+
 ## Types of environments
 There are two types of environments a RL agent can work in:
 * Fully observable environment
