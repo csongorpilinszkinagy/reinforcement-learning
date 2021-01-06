@@ -8,8 +8,8 @@ class Color(Enum):
     BLACK = 1
 
 class Action(Enum):
-    HIT = 0
-    STICK = 1
+    STICK = 0
+    HIT = 1
 
 class Card:
     def __init__(self, color=None, number=None):
